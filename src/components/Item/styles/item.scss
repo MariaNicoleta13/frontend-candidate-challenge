@@ -1,4 +1,4 @@
-@import "../../styles/variables.scss";
+@import "../../TodoWrapper/styles/variables.scss";
 
 .item-wrapper {
   .error-message {
@@ -43,6 +43,7 @@
     border: 0;
     font-size: 1.3em;
     background-color: transparent;
+    resize: none;
 
     &.done {
       color: #888;
@@ -83,6 +84,12 @@
   &.add {
     animation: fadeIn $duration-animation-long forwards;
   }
+
+  &.error {
+    .value {
+      width: 1ch;
+    }
+  }
 }
 
 @keyframes fadeOut {
@@ -91,14 +98,12 @@
   }
   to {
     opacity: 0;
-    display: none;
   }
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    display: none;
   }
   to {
     opacity: 1;

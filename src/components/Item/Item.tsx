@@ -1,56 +1,52 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import "./styles/item.scss";
 import { ErrorIcon, RemoveIcon } from "../icons";
 import { TodoItem } from "../types";
-import { useTodosContext } from "../TodoContext";
+import { useTodosContext } from "../context/TodoContext";
+import { useItemError } from "./hooks/useItemError";
+import { clsx } from "clsx";
 
 type ItemProps = {
   item: TodoItem;
 };
 
 const Item = ({ item }: ItemProps) => {
-  const { remove, toggleCompletion, edit } = useTodosContext();
+  const { remove, toggleCompletion } = useTodosContext();
   const [shouldRemove, setShouldRemove] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isRecentlyAdded, setIsRecentlyAdded] = useState(item.recentlyAdded);
+  const { error, handleTextChange } = useItemError();
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleRemove = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setIsRecentlyAdded(false);
     event.stopPropagation();
     setShouldRemove(true);
     setTimeout(() => {
       remove(item.id);
     }, 500);
   };
-  //TODOL css handler
-  const handleTextChange = (text: string) => {
-    // console.log("text", text, item.text);
-    if (text.trim() === "") {
-      setError("Item cannot be empty");
-    } else {
-      setError(null);
-      edit(item.id, text);
-    }
-  };
 
-  const handleOnChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleTextChange(e.target.value);
-  };
+  useEffect(() => {
+    if (textareaRef.current) {
+      const textarea = textareaRef.current;
+      const textLength = item.text.length;
 
-  const handleOnBlurEvent = (e: React.FocusEvent<HTMLInputElement>) => {
-    if (e.target.value === "") {
-      edit(item.id, e.target.defaultValue);
+      textarea.style.width = `${textLength ? Math.min(45, textLength) : 1}ch`;
+      textarea.style.height = "auto";
+      textarea.style.height = `${textareaRef.current.scrollHeight}px`;
     }
-    return handleTextChange(e.target.value);
-  };
+  }, [item.text]);
 
   return (
     <li className="item-wrapper">
       <div
         data-testid={`todo-item-${item.id}`}
-        className={`item  ${shouldRemove ? "remove" : ""} ${
-          item.recentlyAdded ? "add" : ""
-        } ${error ? "error" : ""}`}
-        // onClick={onToggle} //TODO fix bug
+        className={clsx("item", {
+          remove: shouldRemove,
+          add: isRecentlyAdded,
+          error: error,
+        })}
       >
         <input
           type="checkbox"
@@ -58,16 +54,17 @@ const Item = ({ item }: ItemProps) => {
           className="checkbox"
           checked={item.done}
           disabled={!!error}
+          data-testid={`todo-item-checkbox-${item.id}`}
         />
-        <input
-          type="text"
+        <textarea
+          rows={1}
           value={item.text}
-          className={`value ${item.done ? "done" : ""}`}
-          size={item.text.length}
-          onChange={handleOnChangeEvent}
-          onBlur={handleOnBlurEvent}
+          className={clsx("value", { done: item.done })}
+          onChange={(e) => handleTextChange(item.id, e.target.value)}
+          onBlur={(e) => handleTextChange(item.id, e.target.value)}
+          ref={textareaRef}
         />
-        <button onClick={handleRemove}>
+        <button onClick={handleRemove} data-testid={`remove-${item.id}`}>
           <RemoveIcon size={16} />
         </button>
       </div>
@@ -76,7 +73,7 @@ const Item = ({ item }: ItemProps) => {
           {error && (
             <>
               <ErrorIcon />
-              <span> {error}</span>
+              <span>{error}</span>
             </>
           )}
         </div>

@@ -1,5 +1,3 @@
-import React from "react";
-
 const RemoveIcon = ({ size = 32, color = "black" }) => {
   return (
     <svg

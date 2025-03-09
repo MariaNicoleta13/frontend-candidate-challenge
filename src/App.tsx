@@ -1,5 +1,5 @@
-import "./styles.scss";
-import { TodoWrapper } from "./components/TodoWrapper";
+import { TodoWrapper } from "./components";
+import "./styles/main.scss";
 
 export default function App() {
   return (

@@ -1,5 +1,11 @@
-import { createContext, useState, ReactNode, useContext } from "react";
-import { TodoItem } from "./types";
+import {
+  createContext,
+  useState,
+  ReactNode,
+  useContext,
+  useEffect,
+} from "react";
+import { TodoItem } from "../types";
 import { DEFAULT_TODO_ITEMS } from "./constants";
 
 type TodoContextType = {
@@ -13,7 +19,14 @@ type TodoContextType = {
 const TodoContext = createContext<TodoContextType | undefined>(undefined);
 
 const TodoProvider = ({ children }: { children: ReactNode }) => {
-  const [todos, setTodos] = useState<TodoItem[]>(DEFAULT_TODO_ITEMS);
+  const [todos, setTodos] = useState<TodoItem[]>(() => {
+    const savedTodos = localStorage.getItem("todos");
+    return savedTodos ? JSON.parse(savedTodos) : DEFAULT_TODO_ITEMS;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   const remove = (id: number) => {
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));

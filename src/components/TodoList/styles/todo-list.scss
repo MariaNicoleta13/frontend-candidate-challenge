@@ -1,0 +1,9 @@
+.todo-list-wrapper {
+  display: flex;
+  justify-content: center;
+
+  .todo-list {
+    list-style: none;
+    padding-left: 0;
+  }
+}
