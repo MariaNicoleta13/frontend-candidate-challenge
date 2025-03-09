@@ -1,15 +1,14 @@
-import React from "react";
+import { Item } from "./Item";
+import "./styles/todo-list.scss";
+import { useTodosContext } from "./TodoContext";
 
-type TodoListProps = {
-  todos: any[];
-};
-export const TodoList = ({ todos }: TodoListProps) => {
+export const TodoList = () => {
+  const { todos } = useTodosContext();
+
   return (
     <ul className="todoList">
-      {todos.map((item, i) => (
-        <li key={i}>
-          <span data-testid={`todo${i}`}>{item.text}</span>
-        </li>
+      {todos.map((item) => (
+        <Item item={item} key={item.id} />
       ))}
     </ul>
   );

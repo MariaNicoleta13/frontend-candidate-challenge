@@ -1,0 +1,106 @@
+@import "../../styles/variables.scss";
+
+.item-wrapper {
+  .error-message {
+    display: flex;
+    align-items: center;
+
+    color: $error-color;
+    font-size: 1em;
+    margin-top: 2px;
+    height: calc(1em + 2px);
+
+    svg {
+      fill: $error-color;
+      margin-right: 4px;
+    }
+  }
+}
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+
+  color: #333;
+  background-color: white;
+  padding: $general-padding;
+  border-radius: $border-radius;
+  list-style: none;
+  cursor: pointer;
+
+  input {
+    margin: 0;
+  }
+  .checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: $focus-color;
+  }
+
+  .value {
+    padding: 0;
+    border: 0;
+    font-size: 1.3em;
+    background-color: transparent;
+
+    &.done {
+      color: #888;
+      text-decoration: line-through;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  button {
+    display: flex;
+    padding: unset;
+    border: unset;
+    background-color: transparent;
+    cursor: pointer;
+
+    &:hover {
+      svg {
+        stroke: $focus-color;
+      }
+    }
+  }
+
+  &:nth-child(even) {
+    background-color: #e5e6ff;
+  }
+
+  &:hover {
+    border: 2px solid $focus-color;
+  }
+
+  &.remove {
+    animation: fadeOut $duration-animation forwards;
+  }
+
+  &.add {
+    animation: fadeIn $duration-animation-long forwards;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    display: none;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    display: none;
+  }
+  to {
+    opacity: 1;
+  }
+}
