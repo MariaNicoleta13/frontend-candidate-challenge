@@ -1,13 +1,13 @@
 import React from "react";
 
-import "./styles/ad-item.scss";
+import "./styles/add-item.scss";
 import { useTodosContext } from "../context/TodoContext";
 
-type AdItemProps = {
+type AddItemProps = {
   placeholder?: string;
 };
 
-const AdItem = ({ placeholder = "Add a new Item" }: AdItemProps) => {
+const AddItem = ({ placeholder = "Add a new Item" }: AddItemProps) => {
   const { add } = useTodosContext();
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -29,4 +29,4 @@ const AdItem = ({ placeholder = "Add a new Item" }: AdItemProps) => {
   );
 };
 
-export { AdItem };
+export { AddItem };

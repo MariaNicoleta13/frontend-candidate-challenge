@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Item } from "./Item";
 import { useTodosContext } from "../context/TodoContext";
@@ -28,7 +27,7 @@ describe("Item", () => {
       remove: removeMock,
     });
     (useItemError as jest.Mock).mockReturnValue({
-      error: null,
+      error: EMPTY_ERROR,
       handleTextChange: handleTextChangeMock,
     });
   });
@@ -51,9 +50,7 @@ describe("Item", () => {
 
   it("calls completion function when clicked", async () => {
     render(<Item item={todoItem} />);
-    const checkbox = screen.getByTestId(
-      `todo-item-checkbox-${todoItem.id}`
-    ) as HTMLInputElement;
+    const checkbox = screen.getByTestId(`todo-item-checkbox-${todoItem.id}`);
 
     fireEvent.click(checkbox);
 
@@ -63,9 +60,9 @@ describe("Item", () => {
     render(<Item item={todoItem} />);
 
     const newText = `Updated ${todoItem.text}`;
-    const input = screen.getByDisplayValue(todoItem.text);
+    const element = screen.getByDisplayValue(todoItem.text);
 
-    fireEvent.change(input, { target: { value: newText } });
+    fireEvent.change(element, { target: { value: newText } });
 
     expect(handleTextChangeMock).toHaveBeenCalledWith(todoItem.id, newText);
   });
@@ -83,18 +80,11 @@ describe("Item", () => {
   it("displays error message", async () => {
     render(<Item item={todoItem} />);
 
-    const itemInput = screen.getByDisplayValue(todoItem.text);
+    const element = screen.getByDisplayValue(todoItem.text);
 
-    fireEvent.change(itemInput, { target: { value: "" } });
+    fireEvent.change(element, { target: { value: "" } });
 
     expect(handleTextChangeMock).toHaveBeenCalledWith(todoItem.id, "");
-
-    (useItemError as jest.Mock).mockReturnValue({
-      error: EMPTY_ERROR,
-      handleTextChange: handleTextChangeMock,
-    });
-
-    render(<Item item={todoItem} />);
 
     expect(screen.getByText(EMPTY_ERROR)).toBeInTheDocument();
   });

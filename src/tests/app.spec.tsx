@@ -52,9 +52,9 @@ describe("TodoApp", () => {
     fireEvent.keyDown(input, { key: "Enter", code: "Enter" });
 
     const firstListItem = screen.getAllByRole("listitem")[0];
-    const firstValueElement = within(firstListItem).getByRole("textbox");
+    const firstElementValue = within(firstListItem).getByRole("textbox");
 
-    expect(firstValueElement).toHaveValue(newItemText);
+    expect(firstElementValue).toHaveValue(newItemText);
   });
 
   it("edits an item", () => {
@@ -63,11 +63,11 @@ describe("TodoApp", () => {
     const firstItem = DEFAULT_TODO_ITEMS[0];
     const newText = `Edited ${firstItem.text}`;
 
-    const firstItemInput = screen.getByDisplayValue(firstItem.text);
+    const firstElementValue = screen.getByDisplayValue(firstItem.text);
 
-    fireEvent.change(firstItemInput, { target: { value: newText } });
+    fireEvent.change(firstElementValue, { target: { value: newText } });
 
-    expect(firstItemInput).toHaveValue(newText);
+    expect(firstElementValue).toHaveValue(newText);
   });
 
   it("deletes an item", async () => {
@@ -136,13 +136,13 @@ describe("TodoApp", () => {
     render(<App />);
 
     const lastItem = DEFAULT_TODO_ITEMS[1];
-    const firstItemInput = screen.getByDisplayValue(lastItem.text);
+    const firstElementValue = screen.getByDisplayValue(lastItem.text);
 
-    fireEvent.change(firstItemInput, { target: { value: "" } });
+    fireEvent.change(firstElementValue, { target: { value: "" } });
 
     expect(screen.getByText(EMPTY_ERROR)).toBeDefined();
 
-    fireEvent.change(firstItemInput, { target: { value: "A" } });
+    fireEvent.change(firstElementValue, { target: { value: "A" } });
     expect(screen.queryByText(EMPTY_ERROR)).toBeNull();
   });
 });

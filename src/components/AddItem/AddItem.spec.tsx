@@ -1,13 +1,13 @@
 import { render, fireEvent, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import { useTodosContext } from "../context/TodoContext";
-import { AdItem } from "./AdItem";
+import { AddItem } from "./AddItem";
 
 jest.mock("../context/TodoContext", () => ({
   useTodosContext: jest.fn(),
 }));
 
-describe("AdItem", () => {
+describe("AddItem", () => {
   const addMock = jest.fn();
 
   beforeEach(() => {
@@ -21,20 +21,20 @@ describe("AdItem", () => {
   });
 
   it("uses default placeholder", () => {
-    render(<AdItem />);
+    render(<AddItem />);
     const input = screen.getByPlaceholderText("Add a new Item");
     expect(input).toBeInTheDocument();
   });
 
-  it("uses placeholder", () => {
+  it("uses custom placeholder", () => {
     const newPlaceholder = "New placeholder";
-    render(<AdItem placeholder={newPlaceholder} />);
+    render(<AddItem placeholder={newPlaceholder} />);
     const input = screen.getByPlaceholderText(newPlaceholder);
     expect(input).toBeInTheDocument();
   });
 
   it("makes a new entry", () => {
-    render(<AdItem />);
+    render(<AddItem />);
     const input = screen.getByTestId("add-item-input");
 
     fireEvent.change(input, { target: { value: "New Todo" } });
@@ -46,7 +46,7 @@ describe("AdItem", () => {
   });
 
   it("does not create empty entry", () => {
-    render(<AdItem />);
+    render(<AddItem />);
     const input = screen.getByTestId("add-item-input");
 
     fireEvent.change(input, { target: { value: "" } });
